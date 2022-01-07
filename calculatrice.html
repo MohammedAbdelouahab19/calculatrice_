@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div class="device">
+    <div id="calc">
+
+    </div>
+    <div class="result"></div>
+    <!--<button class="result" onclick="remplir()">Replay</button>-->
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            success: remplir()
+        });
+    });
+
+    var xo=[],tour='x',cmp=0;
+    function remplir(){
+        $('.result').hide()
+        var content = ''
+        xo=[null,null,null,null,null,null,null,null,null]
+        cmp=0
+        tour='x'
+        console.log(xo)
+        for(let i=0;i<9;i++){
+            content+='<div id="case" onclick="check(event)" class="case'+i+'"></div>'
+        }
+        $('#calc').html(content)
+    }
+
+    function check(event){
+        let indice = event.target.className.substring(4);
+        if(xo[indice]==null){
+            cmp++;
+            xo[indice] = tour;
+            checkResult(tour);
+            $('.case'+indice+'').addClass(tour)
+            tour == 'x' ? tour='o': tour='x'
+        }
+    }
+    function checkResult(tour){
+        if(xo[6]==xo[7]==xo[8]){
+            console.log('here')
+        }
+        (xo[0]==xo[1] && xo[1]==xo[2] && xo[0]!=null) || (xo[0]==xo[3] && xo[3]==xo[6] && xo[0]!=null) || (xo[0]==xo[4] && xo[4]==xo[8] && xo[0]!=null) ||
+        (xo[3]==xo[4] && xo[4]==xo[5] && xo[3]!=null)|| (xo[6]==xo[7] && xo[7]==xo[8] && xo[6]!=null) || (xo[1]==xo[4] && xo[4]==xo[7] && xo[1]!=null)
+        || (xo[2]==xo[5] && xo[5]==xo[8] && xo[2]!=null) || (xo[2]==xo[4] && xo[4]==xo[6] && xo[2]!=null)? win(tour) :null_()
+    }
+    function win(tour){
+        $('.result').show()
+        $('.result').text(tour+' Win')
+        setTimeout(function(){remplir()},1000)
+    }
+
+    function null_(){
+        if(cmp==9){
+            $('.result').show()
+            $('.result').text('Match null')
+            setTimeout(function(){remplir()},1000)
+        }
+    }
+</script>
+</body>
+</html>
+<style>
+    body{
+        width: 100%;
+        background: no-repeat url('https://image.freepik.com/photos-gratuite/fond-aquarelle-peint-main-forme-ciel-nuages_24972-1095.jpg');
+        background-size: 100%;
+    }
+    #case{
+        border: 2px #fdfdfd solid;
+        background: #d7d3d32b;
+        width: 26%;
+        height: 60px;
+        float: left;
+        margin: 6px;
+        font-size: 50px;
+        text-align: center;
+        border-radius: 10px;
+        box-shadow: 0px 0px 4px 2px #c5c5c5;
+    }
+    .x{
+        background: no-repeat url(https://i.dlpng.com/static/png/6658483_preview.png) !important;
+        background-size: 55% !important;
+        background-position: center !important;
+    }
+    .o{
+        background: no-repeat url(https://image.similarpng.com/very-thumbnail/2020/10/Yellow-color-shaped-O-letter-on-transparent-background-PNG.png) !important;
+        background-size: 55% !important;
+        background-position: center !important;
+    }
+    #calc{
+        color: #2084c6;
+        width: 25%;
+        margin:auto;
+        background:blue;
+        margin-top: 9%;
+    }
+    .result{
+        background-color: #8f8f8f;
+        float: left;
+        padding: 12px;
+        border-radius: 13px;
+        color: white;
+        box-shadow: 0px 0px 0px 2px #c7c7c7;
+        display: none;
+    }
+</style>
